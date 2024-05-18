@@ -21,8 +21,8 @@ func GetSystemSection() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	output := fmt.Sprintf("HostName: %s, Totalt Memory: %d, Used Memory: %d, OS: %s",
-		hostStat.Hostname, vmStat.Total, vmStat.Used, runTimeOS)
+	output := fmt.Sprintf("HostName: %s, Totalt Memory: %.2f, Used Memory: %.2f, OS: %s",
+		hostStat.Hostname, bytesToGB(vmStat.Total), bytesToGB(vmStat.Used), runTimeOS)
 	return output, nil
 }
 
@@ -41,6 +41,11 @@ func GetDiskSection() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	output := fmt.Sprintf("Total Disk Space: %d, Free Disk SPace: %d", diskStat.Total, diskStat.Free)
+	output := fmt.Sprintf("Total Disk Space: %.2f, Free Disk SPace: %.2f", bytesToGB(diskStat.Total), bytesToGB(diskStat.Free))
 	return output, nil
+}
+
+func bytesToGB(bytes uint64) float64 {
+	const bytesInGB = 1073741824.0
+	return float64(bytes) / bytesInGB
 }
